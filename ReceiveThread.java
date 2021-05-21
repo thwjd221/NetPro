@@ -11,7 +11,12 @@ public class ReceiveThread extends Thread{
 	}
 
 	public void start() {	//수신스레드 동작
-		
+		try{
+			
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 }

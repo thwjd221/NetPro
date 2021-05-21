@@ -13,7 +13,12 @@ public class SendThread extends Thread{
 	}
 
 	public void start() {	//송신스레드 동작
-		
+		try{
+			
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 }

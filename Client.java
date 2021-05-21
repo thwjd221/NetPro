@@ -1,6 +1,6 @@
 import java.io.IOException;
 import java.net.Socket;
-
+	//변경사항저장 테스트
 public class Client {
 
 	public static void main(String[] args) {

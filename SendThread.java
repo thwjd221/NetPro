@@ -3,7 +3,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-
+	//test
 public class SendThread extends Thread{
 	Socket socket = null;
 	Scanner scnner = new Scanner(System.in);

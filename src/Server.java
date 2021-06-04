@@ -81,10 +81,10 @@ class ServerThread extends Thread{
 					synchronized (Server.total_socket) {
 						for (int k = 0; k < Server.total_socket.size(); k++) {
 							Socket temp = (Socket) Server.total_socket.get(k);
-							i++;
-							continue;
 							try {
 								temp.getOutputStream().write(tpass);
+								i++;
+								continue;
 							} catch (Exception e) {
 								System.out.println("송신 오류");
 								Server.total_socket.remove(k);

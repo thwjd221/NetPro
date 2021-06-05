@@ -26,16 +26,12 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel5 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        Panel_screen = new javax.swing.JPanel();
+        Panel_name = new javax.swing.JPanel();
+        Label_name = new javax.swing.JLabel();
+        TextField_name = new javax.swing.JTextField();
+        Button_login = new javax.swing.JButton();
+        Label_screen = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("로그인");
@@ -45,72 +41,48 @@ public class Login extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(600, 450));
 
-        jPanel5.setMaximumSize(null);
-        jPanel5.setPreferredSize(new java.awt.Dimension(600, 450));
-        jPanel5.setLayout(null);
+        Panel_screen.setMaximumSize(null);
+        Panel_screen.setPreferredSize(new java.awt.Dimension(600, 450));
+        Panel_screen.setLayout(null);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setAlignmentX(0.0F);
-        jPanel1.setAlignmentY(0.0F);
-        jPanel1.setMinimumSize(new java.awt.Dimension(200, 100));
-        jPanel1.setPreferredSize(new java.awt.Dimension(200, 100));
-        jPanel1.setLayout(null);
+        Panel_name.setBackground(new java.awt.Color(255, 255, 255));
+        Panel_name.setAlignmentX(0.0F);
+        Panel_name.setAlignmentY(0.0F);
+        Panel_name.setMinimumSize(new java.awt.Dimension(200, 100));
+        Panel_name.setPreferredSize(new java.awt.Dimension(200, 100));
+        Panel_name.setLayout(null);
 
-        jLabel1.setFont(jLabel1.getFont().deriveFont(jLabel1.getFont().getSize()-1f));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("아이디");
-        jLabel1.setToolTipText("");
-        jPanel1.add(jLabel1);
-        jLabel1.setBounds(30, 10, 40, 20);
+        Label_name.setFont(Label_name.getFont().deriveFont(Label_name.getFont().getSize()-1f));
+        Label_name.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        Label_name.setText("닉네임");
+        Label_name.setToolTipText("");
+        Panel_name.add(Label_name);
+        Label_name.setBounds(10, 10, 40, 20);
 
-        jLabel2.setFont(jLabel2.getFont().deriveFont(jLabel2.getFont().getSize()-1f));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("비밀번호");
-        jPanel1.add(jLabel2);
-        jLabel2.setBounds(20, 40, 50, 20);
+        TextField_name.setFont(TextField_name.getFont().deriveFont(TextField_name.getFont().getSize()-1f));
+        TextField_name.setNextFocusableComponent(Button_login);
+        Panel_name.add(TextField_name);
+        TextField_name.setBounds(60, 10, 110, 24);
 
-        jTextField1.setFont(jTextField1.getFont().deriveFont(jTextField1.getFont().getSize()-1f));
-        jTextField1.setNextFocusableComponent(jButton2);
-        jPanel1.add(jTextField1);
-        jTextField1.setBounds(77, 10, 110, 24);
-
-        jPasswordField1.setFont(jPasswordField1.getFont().deriveFont(jPasswordField1.getFont().getSize()-1f));
-        jPasswordField1.setToolTipText("");
-        jPanel1.add(jPasswordField1);
-        jPasswordField1.setBounds(77, 40, 110, 24);
-
-        jButton1.setFont(jButton1.getFont().deriveFont(jButton1.getFont().getSize()-1f));
-        jButton1.setText("회원가입");
-        jButton1.setPreferredSize(new java.awt.Dimension(70, 21));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Button_login.setFont(Button_login.getFont().deriveFont(Button_login.getFont().getSize()-1f));
+        Button_login.setText("로그인");
+        Button_login.setPreferredSize(new java.awt.Dimension(70, 21));
+        Button_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                Button_loginActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1);
-        jButton1.setBounds(20, 70, 80, 21);
+        Panel_name.add(Button_login);
+        Button_login.setBounds(90, 40, 80, 21);
 
-        jButton2.setFont(jButton2.getFont().deriveFont(jButton2.getFont().getSize()-1f));
-        jButton2.setText("로그인");
-        jButton2.setPreferredSize(new java.awt.Dimension(70, 21));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton2);
-        jButton2.setBounds(117, 70, 70, 21);
+        Panel_screen.add(Panel_name);
+        Panel_name.setBounds(200, 300, 190, 70);
 
-        jPanel5.add(jPanel1);
-        jPanel1.setBounds(200, 300, 200, 100);
-
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(Base.Img("https://blog.kakaocdn.net/dn/bbxCGe/btq5Q6gUzU6/E9pkCraFe75pW2VniXd801/img.jpg"));
-        jLabel3.setAlignmentX(0.5F);
-        jPanel5.add(jLabel3);
-        jLabel3.setBounds(0, 0, 600, 450);
-        jPanel5.add(jLabel4);
-        jLabel4.setBounds(195, 295, 211, 110);
+        Label_screen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Label_screen.setIcon(Base.Img("https://blog.kakaocdn.net/dn/bbxCGe/btq5Q6gUzU6/E9pkCraFe75pW2VniXd801/img.jpg"));
+        Label_screen.setAlignmentX(0.5F);
+        Panel_screen.add(Label_screen);
+        Label_screen.setBounds(0, 0, 600, 450);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,55 +90,35 @@ public class Login extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(Panel_screen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(Panel_screen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
-        String ID = jTextField1.getText();
-        String PW = new String(jPasswordField1.getPassword());
+    private void Button_loginActionPerformed(ActionEvent evt) {//GEN-FIRST:event_Button_loginActionPerformed
+        String ID = TextField_name.getText();
         //if(false){  //Server의 user info랑 비교
-            JOptionPane.showMessageDialog(null, new JLabel("등록된 계정이 없습니다.", JLabel.CENTER), "메세지", JOptionPane.WARNING_MESSAGE);
-            jTextField1.setText("");
-            jPasswordField1.setText("");
+            JOptionPane.showMessageDialog(null, new JLabel("등록된 닉네임이 있습니다.", JLabel.CENTER), "메세지", JOptionPane.WARNING_MESSAGE);
+            TextField_name.setText("");
         //}
         //else{
-            //매치 될 경우 접속
+            //등록된 닉네임 없을 경우 접속
          //}
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        //if(false){  //Server의 user info랑 ID 비교
-            JOptionPane.showMessageDialog(null, new JLabel("이미 등록된 계정입니다.", JLabel.CENTER), "메세지", JOptionPane.WARNING_MESSAGE);
-            jTextField1.setText("");
-            jPasswordField1.setText("");
-        //}
-        //else{ //매치 될 경우
-            //JOptionPane.showMessageDialog(null, new JLabel("가입이 완료되었습니다.", JLabel.CENTER), "메세지", JOptionPane.PLAIN_MESSAGE);    //가입
-            //접속
-        //}
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_Button_loginActionPerformed
 
     //static JFrame frm;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JButton jButton1;
-    javax.swing.JButton jButton2;
-    javax.swing.JLabel jLabel1;
-    javax.swing.JLabel jLabel2;
-    javax.swing.JLabel jLabel3;
-    javax.swing.JLabel jLabel4;
-    javax.swing.JPanel jPanel1;
-    javax.swing.JPanel jPanel5;
-    javax.swing.JPasswordField jPasswordField1;
-    javax.swing.JTextField jTextField1;
+    javax.swing.JButton Button_login;
+    javax.swing.JLabel Label_name;
+    javax.swing.JLabel Label_screen;
+    javax.swing.JPanel Panel_name;
+    javax.swing.JPanel Panel_screen;
+    javax.swing.JTextField TextField_name;
     // End of variables declaration//GEN-END:variables
 }

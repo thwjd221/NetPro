@@ -1,71 +1,90 @@
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.Scanner;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
-class ClientThread extends Thread implements ActionListener{
-	Socket client;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import java.awt.Image;
+
+
+class ClientThread extends Thread{
 	
-	String msg;
+	Socket client;
 	
 	public ClientThread(Socket client) {
 		this.client = client;
 	}
 	
 	public void run() {
+		Image img = null;
+		InputStream in = null;
+		OutputStream out = null;
+		JTextArea jta = new JTextArea(15, 15);
+		//ì£¼ì œ ì „ë‹¬ë°›ê¸°
 		try {
-			InputStream in = client.getInputStream();
+			in = client.getInputStream();
 			while(true) {
-				byte b[] = new byte[256];
+				byte[] b = new byte[256];
 				in.read(b);
-				String msg = new String(b);
-				System.out.println(msg+"\n");
+				String str = new String(b);
+				jta.append(str.trim()+"\n");
 			}
 		}
-		catch(Exception e){
-			System.out.println("¸Ş½ÃÁö ¼ö½Å ¿À·ù");
+		catch(Exception e) {
+			System.out.println(e);
 		}
+		//ì£¼ì œ ë°›ì€ ê²½ìš° ê·¸ë¦¼ ê·¸ë¦¬ê¸°
+		//Draw();
+		
+		//ê·¸ë¦¼ ì†¡ì‹ 
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
+			oos.writeObject(img);
+		}
+		catch(Exception e) {
+			System.out.println("ì´ë¯¸ì§€ ì „ì†¡ ì˜¤ë¥˜");
+		}
+		
+		//ê·¸ë¦¼ ìˆ˜ì‹ 
+		try {
+			ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
+			img = (Image)ois.readObject();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//ì •ë‹µ ì „ì†¡
+		JTextField jtf = new JTextField(15);
+		String msg = jtf.getText();
+		try {
+			out.write(msg.getBytes());
+			jtf.setText("");
+		}
+		catch(Exception e) {
+			System.out.println("ë©”ì‹œì§€ ì „ì†¡ ì˜¤ë¥˜");
+		}
+		
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-	
-	}
-	public void KeyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_ENTER){
-			try {
-				OutputStream out = client.getOutputStream();
-				out.write(msg.getBytes());
-			}
-			catch(Exception e1) {
-				System.out.println("¸Ş½ÃÁö Àü¼Û ¿À·ù");
-			}
-		}
-	}
-
 }
 
 public class Client {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		try {							
-			Socket socket = new Socket("155.230.57.60",8888);	//¼ÒÄÏ ¼­¹ö Á¢¼Ó
+		try {			
+			Socket socket;
+			socket = new Socket("ì„œë²„ ip",8888);	//ì†Œì¼“ ì„œë²„ ì ‘ì†
 			
 			ClientThread t1 = new ClientThread(socket);
-			t1.start();
+			t1.start(); 
 		}
 		catch( IOException e) {
-			e.printStackTrace();	//¿¹¿Ü
+			e.printStackTrace();	//ì˜ˆì™¸
 		}
 	}
 

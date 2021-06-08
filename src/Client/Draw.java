@@ -6,7 +6,7 @@ import java.util.*;
 import java.awt.event.*;
 
 public class Draw extends JPanel{
-    private Vector<Point> xy = new Vector<Point>();
+    Vector<Point> xy = new Vector<Point>();
         
     public Draw() {
         addMouseMotionListener(new MouseMotionAdapter() {

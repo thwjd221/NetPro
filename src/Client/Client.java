@@ -3,26 +3,21 @@ package Client;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.Vector;
-
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import Server.Server;
+import Server.User_info;
 
+import java.awt.Graphics;
 import java.awt.Image;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 class ClientThread extends Thread{
 	Socket client;
     String myname = null;
-    Integer score;
 	Room room;
         
 	public ClientThread(Socket client) {
 		this.client = client;
-		this.score = 0;
 	}
         
     void login(){
@@ -46,66 +41,61 @@ class ClientThread extends Thread{
             }
         }
     }
-    
+
 	public void run() {
         login();
         
-		Image img = null;
+        Image img = null;
 		InputStream in = null;
 		OutputStream out = null;
 		
-		//게임 시작전 시작후 구분
+        //4명 접속할 때까지 기다림
+		room.TextField_mychat.setEnabled(false);	//채팅 금지
 		
-		//그림 그리는 사람만 주제 받게 flag 설정
-		try {
+        try {
 			in = client.getInputStream();
 			byte[] b = new byte[256];
 			in.read(b);
 			String str = new String(b);
-			room.subject(str);
+			room.Append_Room_chat(str);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-	
-		//주제 받은 경우 그림 그리기
-		//Draw();
-		
-		//그림 송신
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
-			oos.writeObject(img);
-		}
-		catch(Exception e) {
-			System.out.println("이미지 전송 오류");
-		}
-		
-		//그림 수신
-		try {
-			ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
-			img = (Image)ois.readObject();
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//정답 전송
-		JTextField jtf = new JTextField(15);
-		String msg = jtf.getText();
-		try {
-			out.write(msg.getBytes());
-			jtf.setText("");
-		}
-		catch(Exception e) {
-			System.out.println("메시지 전송 오류");
-		}
-		
+        
+		//for( i = 0; i < 4; i++) {
+			//그림 그리는 사람만 주제 받게 flag 설정
+			room.TextField_mychat.setEnabled(true);
+			
+			//try {
+				//in = client.getInputStream();
+				//byte[] b = new byte[256];
+				//in.read(b);
+				//String str = new String(b);
+				//room.subject(str);
+				//주제 받은 경우 그림 그리기
+				room.Draw_panel.setEnabled(true);
+			//} catch (IOException e1) {
+				// TODO Auto-generated catch block
+			//	e1.printStackTrace();
+			//}
+			
+			//그림 수신
+			try {
+				ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
+				room.Draw_panel = (Draw) ois.readObject();
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 }
 
-public class Client {    
+public class Client {
+	User_info myinfo;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {			

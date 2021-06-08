@@ -1,8 +1,12 @@
 package Client;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.*;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Vector;
 
 import javax.swing.*;
 
@@ -11,6 +15,8 @@ import Server.Server;
 public class Room extends javax.swing.JFrame {
     Socket client;
     String myname;
+    OutputStream out;
+    ObjectOutputStream oos;
     
     public void Append_Room_chat(String s){
         TextArea_chat.append(s);
@@ -28,10 +34,16 @@ public class Room extends javax.swing.JFrame {
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
+     void initComponents() {
+    	try {
+			OutputStream out = client.getOutputStream();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
         Panel_screen = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        Draw_panel = new Draw();
         Scroll_chat = new javax.swing.JScrollPane();
         TextArea_chat = new javax.swing.JTextArea();
         Layered_mychat = new javax.swing.JLayeredPane();
@@ -57,11 +69,12 @@ public class Room extends javax.swing.JFrame {
         Panel_screen.setPreferredSize(new java.awt.Dimension(1020, 760));
         Panel_screen.setLayout(null);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(590, 380));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
+        Draw_panel.setBackground(new java.awt.Color(255, 255, 255));
+        Draw_panel.setPreferredSize(new java.awt.Dimension(590, 380));
+        Draw_panel.setEnabled(false);
+        
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(Draw_panel);
+        Draw_panel.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 590, Short.MAX_VALUE)
@@ -71,8 +84,8 @@ public class Room extends javax.swing.JFrame {
             .addGap(0, 370, Short.MAX_VALUE)
         );
 
-        Panel_screen.add(jPanel1);
-        jPanel1.setBounds(215, 40, 590, 370);
+        Panel_screen.add(Draw_panel);
+        Draw_panel.setBounds(215, 40, 590, 370);
 
         Scroll_chat.setBackground(new java.awt.Color(255, 255, 255));
         Scroll_chat.setBorder(null);
@@ -125,7 +138,7 @@ public class Room extends javax.swing.JFrame {
         Layered_mychat.setBounds(210, 670, 600, 59);
 
         Button_start.setFont(Button_start.getFont().deriveFont(Button_start.getFont().getSize()+2f));
-        Button_start.setText("게임 시작");
+        Button_start.setText("그림 전송");
         Button_start.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Button_startActionPerformed(evt);
@@ -186,12 +199,11 @@ public class Room extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     
     //채팅 입력
-    private void TextField_mychatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextField_mychatActionPerformed
+     void TextField_mychatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextField_mychatActionPerformed
         // TODO add your handling code here:
         String message = TextField_mychat.getText();
         TextField_mychat.setText("");
         try {
-            OutputStream out = client.getOutputStream();
             out.write(message.getBytes());
             out.flush();
         } catch (IOException ex) {
@@ -199,32 +211,44 @@ public class Room extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_TextField_mychatActionPerformed
     
-    //게임 시작
-    private void Button_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_startActionPerformed
-
-        //서버에서 게임 시작 
+    //그림 전송
+     void Button_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_startActionPerformed
+    	 try {
+    		 oos = new ObjectOutputStream(client.getOutputStream());
+			 oos.writeObject(Draw_panel);
+    		 oos.flush();
+         } catch (IOException ex) {
+             
+         }
+        //
     }//GEN-LAST:event_Button_startActionPerformed
 
     //접속 종료, 창 끄기
-    private void Button_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_exitActionPerformed
-        System.exit(0);
+     void Button_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_exitActionPerformed
+    	 try {
+			client.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	 System.exit(0);
         
     }//GEN-LAST:event_Button_exitActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Button_exit;
-    private javax.swing.JButton Button_start;
-    private javax.swing.JLabel Label_icon;
-    private javax.swing.JLabel Label_screen;
-    private javax.swing.JLabel Label_subject;
-    private javax.swing.JLayeredPane Layered_mychat;
-    private javax.swing.JPanel Panel_screen;
-    private javax.swing.JScrollBar ScrollBar_mychat;
-    private javax.swing.JScrollPane Scroll_chat;
-    private javax.swing.JTextArea TextArea_chat;
-    private javax.swing.JTextField TextField_mychat;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField TextField_subject;
+     javax.swing.JButton Button_exit;
+     javax.swing.JButton Button_start;
+     javax.swing.JLabel Label_icon;
+     javax.swing.JLabel Label_screen;
+     javax.swing.JLabel Label_subject;
+     javax.swing.JLayeredPane Layered_mychat;
+     javax.swing.JPanel Panel_screen;
+     javax.swing.JScrollBar ScrollBar_mychat;
+     javax.swing.JScrollPane Scroll_chat;
+     javax.swing.JTextArea TextArea_chat;
+     javax.swing.JTextField TextField_mychat;
+     Draw Draw_panel;
+     javax.swing.JTextField TextField_subject;
     // End of variables declaration//GEN-END:variables
 }

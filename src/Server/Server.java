@@ -47,8 +47,8 @@ class ServerThread extends Thread {
     
 	public void run() {
         login();
-
-		Image img = null;
+        
+        Client.Draw draw_panel = null;
 		InputStream is = null;
 		boolean flag = true;
 		
@@ -68,20 +68,21 @@ class ServerThread extends Thread {
 		
 		for (i = 0; i < 4; i++) {
 			// string -> byte 변환
-			byte[] transstr = subject[i].getBytes();
+			//byte[] transstr = subject[i].getBytes();
 			// 주제 전달
 			Socket givesub = (Socket) Server.total_socket.get(i);
-			try {
-				givesub.getOutputStream().write(transstr);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			//try {
+			//	givesub.getOutputStream().write(transstr);
+			//} catch (IOException e) {
+			//	// TODO Auto-generated catch block
+			//	e.printStackTrace();
+			//}
 			// 그림받기
+			
+			
 			try {
 				ObjectInputStream ois = new ObjectInputStream(givesub.getInputStream());
-				img = (Image) ois.readObject();
-
+				draw_panel = (Client.Draw) ois.readObject();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -97,7 +98,7 @@ class ServerThread extends Thread {
 
 					try {
 						ObjectOutputStream oos = new ObjectOutputStream(temp.getOutputStream());
-						oos.writeObject(img);
+						oos.writeObject(draw_panel);
 						// temp.getOutputStream().write(b);
 					} catch (Exception e) {
 						System.out.println("사진 송신 오류");
@@ -186,6 +187,16 @@ public class Server {
 			
 			//ServerThread thread = new ServerThread(server);
 			thread.start();
+			
+            if(thread.isInterrupted() == true) {
+            	total_socket.remove(server);
+            	//name 얻어오기
+				String name;
+				name = Server.info.get(server).name;
+				Server.info.remove(server);	//user_info 지우기
+				Server.sl.setUserlist();
+				Server.sl.toLog("[" + name + "]" + " 님이 퇴장하셨습니다.");
+            }
 		}
 	}
 }

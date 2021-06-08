@@ -52,18 +52,20 @@ class ServerThread extends Thread {
 		InputStream is = null;
 		boolean flag = true;
 		//all user login
-		if(total_socket.size() == 4) {
-			for (int k = 0; k < Server.total_socket.size(); k++) {
-				Socket temp = (Socket) Server.total_socket.get(k);
+		while(total_socket.size()<5) {
+			if(total_socket.size() == 4) {
+				for (int k = 0; k < Server.total_socket.size(); k++) {
+					Socket temp = (Socket) Server.total_socket.get(k);
 
-				try {
-					temp.getOutputStream().write(tready);
-				} catch (Exception e) {
-					System.out.println("ready trans fail");
+					try {
+						temp.getOutputStream().write(tready);
+					} catch (Exception e) {
+						System.out.println("ready trans fail");
+					}
 				}
-			}
+			}	
 		}
-		
+				
 		for (i = 0; i < 4; i++) {
 			// string -> byte 蹂��솚
 			byte[] transstr = subject[i].getBytes();

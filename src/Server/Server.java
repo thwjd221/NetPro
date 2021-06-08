@@ -17,18 +17,20 @@ class ServerThread extends Thread {
 	String[] subject = new String[] { "cat", "school", "sandwich", "friend" };
 
 	int i = 0;
-	byte[] b; // 정답문자열
+	byte[] b; // �젙�떟臾몄옄�뿴
 	String pass = "correct!";
 	String fail = "no!";
-	// string -> byte 변환
+	String ready = "users login!";
+	// string -> byte 蹂��솚
 	byte[] transstr = subject[i].getBytes();
 	byte[] tpass = pass.getBytes();
 	byte[] tfail = fail.getBytes();
-        
+    byte[] tready = ready.getBytes();   
+	
 	public ServerThread(Socket server) {
 		this.server = server;
 	}
-        //로그인
+        //濡쒓렇�씤
     void login(){
     	try {
              String name;
@@ -37,7 +39,7 @@ class ServerThread extends Thread {
 
              Server.info.put(name, 0);
              Server.sl.setUserlist();
-             Server.sl.toLog("[" + name + "]" + " 님이 입장하셨습니다.");
+             Server.sl.toLog("[" + name + "]" + " �떂�씠 �엯�옣�븯�뀲�뒿�땲�떎.");
     	} catch (IOException e) {
 	         e.printStackTrace();
 	    } 
@@ -49,10 +51,23 @@ class ServerThread extends Thread {
 		Image img = null;
 		InputStream is = null;
 		boolean flag = true;
+		//all user login
+		if(total_socket.size() == 4) {
+			for (int k = 0; k < Server.total_socket.size(); k++) {
+				Socket temp = (Socket) Server.total_socket.get(k);
+
+				try {
+					temp.getOutputStream().write(tready);
+				} catch (Exception e) {
+					System.out.println("ready trans fail");
+				}
+			}
+		}
+		
 		for (i = 0; i < 4; i++) {
-			// string -> byte 변환
+			// string -> byte 蹂��솚
 			byte[] transstr = subject[i].getBytes();
-			// 주제 전달
+			// 二쇱젣 �쟾�떖
 			Socket givesub = (Socket) Server.total_socket.get(i);
 			try {
 				givesub.getOutputStream().write(transstr);
@@ -60,7 +75,7 @@ class ServerThread extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// 그림받기
+			// 洹몃┝諛쏄린
 			try {
 				ObjectInputStream ois = new ObjectInputStream(givesub.getInputStream());
 				img = (Image) ois.readObject();
@@ -74,7 +89,7 @@ class ServerThread extends Thread {
 			}
 
 			synchronized (Server.total_socket) {
-				// 수신한 사진 전체 클라이언트에 보내기
+				// �닔�떊�븳 �궗吏� �쟾泥� �겢�씪�씠�뼵�듃�뿉 蹂대궡湲�
 				for (int k = 0; k < Server.total_socket.size(); k++) {
 					Socket temp = (Socket) Server.total_socket.get(k);
 
@@ -83,12 +98,12 @@ class ServerThread extends Thread {
 						oos.writeObject(img);
 						// temp.getOutputStream().write(b);
 					} catch (Exception e) {
-						System.out.println("사진 송신 오류");
+						System.out.println("�궗吏� �넚�떊 �삤瑜�");
 						Server.total_socket.remove(k);
 					}
 				}
 			}
-			// 답 받아오기
+			// �떟 諛쏆븘�삤湲�
 			try {
 				is = server.getInputStream();
 			} catch (Exception e) {
@@ -99,8 +114,8 @@ class ServerThread extends Thread {
 				b = new byte[256];
 				try {
 					is.read(b);
-					// 정답 비교
-					if (transstr.equals(b)) { // 정답임
+					// �젙�떟 鍮꾧탳
+					if (transstr.equals(b)) { // �젙�떟�엫
 						synchronized (Server.total_socket) {
 							for (int k = 0; k < Server.total_socket.size(); k++) {
 								Socket temp = (Socket) Server.total_socket.get(k);
@@ -110,12 +125,12 @@ class ServerThread extends Thread {
 									i++;
 									continue;
 								} catch (Exception e) {
-									System.out.println("송신 오류");
+									System.out.println("�넚�떊 �삤瑜�");
 									Server.total_socket.remove(k);
 								}
 							}
 						}
-					} else { // 정답아님
+					} else { // �젙�떟�븘�떂
 						synchronized (Server.total_socket) {
 							for (int k = 0; k < Server.total_socket.size(); k++) {
 								Socket temp = (Socket) Server.total_socket.get(k);
@@ -123,14 +138,14 @@ class ServerThread extends Thread {
 								try {
 									temp.getOutputStream().write(tfail);
 								} catch (Exception e) {
-									System.out.println("송신 오류");
+									System.out.println("�넚�떊 �삤瑜�");
 									Server.total_socket.remove(k);
 								}
 							}
 						}
 					}
 				} catch (Exception e) {
-					System.out.println("정답 수신 오류");
+					System.out.println("�젙�떟 �닔�떊 �삤瑜�");
 					e.printStackTrace();
 					flag = false;
 				}
@@ -153,11 +168,11 @@ public class Server {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     sl.setVisible(true);
-                    sl.toLog("[Server]: 서버가 시작되었습니다.");
+                    sl.toLog("[Server]: �꽌踰꾧� �떆�옉�릺�뿀�뒿�땲�떎.");
                 }
             });
 		while (true) {
-			Socket server = ss.accept(); // accept()메소드는 (1) + (2)번 기능 둘다 수행			
+			Socket server = ss.accept(); // accept()硫붿냼�뱶�뒗 (1) + (2)踰� 湲곕뒫 �몮�떎 �닔�뻾			
 			total_socket.add(server);
 			
 			new ServerThread(server).start();

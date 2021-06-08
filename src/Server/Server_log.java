@@ -1,11 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Server;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Collection;
+import java.util.Vector;
 
 import javax.swing.*;
 
@@ -21,11 +19,13 @@ public class Server_log extends javax.swing.JFrame {
     }
     
     void setUserlist() {
-    	Object[] obj = null;
+    	Vector userlist = new Vector();
+    	Collection<User_info> obj;
     	if(Server.info != null) {
-    		obj = Server.info.keySet().toArray();
+    		obj = Server.info.values();
+    		obj.forEach(value -> userlist.add(value.name));
     	}
-    	jList1.setListData(obj);
+    	jList1.setListData(userlist);
     }
     
     /**

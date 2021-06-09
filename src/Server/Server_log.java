@@ -177,8 +177,6 @@ public class Server_log extends javax.swing.JFrame {
         jDialog1.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JButton jButton1;
     javax.swing.JButton jButton2;

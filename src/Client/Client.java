@@ -5,17 +5,13 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.Vector;
 
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import Server.User_info;
 
-import java.awt.Graphics;
-import java.awt.Image;
 
 class ClientThread extends Thread{
 	Socket client;
-    String myname = null;
+    String myname;
 	Room room;
         
 	public ClientThread(Socket client) {
@@ -47,54 +43,92 @@ class ClientThread extends Thread{
 	public void run() {
         login();
         
+        String nn ="123";
+        
 		InputStream in = null;
 		OutputStream out = null;
+		boolean flag = false;
+		String str = null;
 		
 		room.setDraw(false); //채팅 금지
+		room.setChat(false);
 		
-		//1.
-		//4명 접속할 때까지 기다림4명 접속할 때까지 기다린 후, 메세지 수신
-        try {
-			in = client.getInputStream();
-			byte[] b = new byte[256];
-			in.read(b);
-			String str = new String(b);
-			room.Append_Room_chat(str);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		for(int i = 0; i < 4; i++) {
+			
+			/* 2.
+			 * 현재 그리는 유저 이름 수신
+			 * */
+	        try {
+	        	room.Draw_panel.clear();
+				in = client.getInputStream();
+				byte[] b = new byte[256];
+				in.read(b);
+				str = new String(b);
+				if(myname.equals(nn)) {
+					flag = true;
+				}
+				else {
+					flag = false;
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	        room.Append_Room_chat(str);
+	        
+			/* 3.
+			 * 주제 수신
+			 * */
+	        if(flag) {
+	        	room.setDraw(true);
+	            try {
+	    			byte[] b = new byte[256];
+	    			room.Append_Room_chat(str);
+	    			in.read(b);
+	    			str = new String(b);
+	    			room.subject(str);
+	    		} catch (IOException e1) {
+	    			// TODO Auto-generated catch block
+	    			e1.printStackTrace();
+	    		}
+	        }
+	        else {
+				/* 4.
+				 * 그림 수신
+				 * */
+				try {
+					ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
+					Vector draw = (Vector) ois.readObject();
+					room.Draw_panel.recvDraw(draw);
+				}
+				catch(IOException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				room.setChat(true);
+	        }
+	        
+			/* 5.
+			 * 정답 수신
+			 * */
+	        try {
+				byte[] b = new byte[256];
+				while(in.read(b) > 0) {
+					String meg = new String(b);
+					room.Append_Room_chat(str);
+					if(str.equals("correct!")) {
+						break;
+					}
+					//if(in.read() > 0 && str != "correct!" && str != "no!") 
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	        
 		}
-        
-		//for( i = 0; i < 4; i++) {
-			//그림 그리는 사람만 주제 받게 flag 설정
-			
-			
-			//try {
-				//in = client.getInputStream();
-				//byte[] b = new byte[256];
-				//in.read(b);
-				//String str = new String(b);
-				//room.subject(str);
-				//주제 받은 경우 그림 그리기
-				room.Draw_panel.setEnabled(true);
-			//} catch (IOException e1) {
-				// TODO Auto-generated catch block
-			//	e1.printStackTrace();
-			//}
-			
-			//4.
-			//그림 수신
-			try {
-				ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
-				Vector temp = (Vector) ois.readObject();
-				room.Draw_panel.recvDraw(temp);
-			}
-			catch(IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 	}
 }
 

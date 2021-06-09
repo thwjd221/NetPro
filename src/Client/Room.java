@@ -1,16 +1,11 @@
 package Client;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.event.*;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Vector;
-
 import javax.swing.*;
 
-import Server.Server;
 
 public class Room extends javax.swing.JFrame {
     Socket client;
@@ -140,6 +135,7 @@ public class Room extends javax.swing.JFrame {
         });
         Panel_screen.add(Button_start);
         Button_start.setBounds(30, 650, 150, 30);
+        Button_start.setEnabled(true);
 
         Button_exit.setFont(Button_exit.getFont().deriveFont(Button_exit.getFont().getSize()+2f));
         Button_exit.setText("종료");
@@ -247,8 +243,13 @@ public class Room extends javax.swing.JFrame {
  	void subject(String sub) {
  		Label_subject.setText(sub);
  	}
-    
+ 	
  	void setDraw(boolean flag) {
+ 		Button_start.setEnabled(flag);
+ 		Draw_panel.setEnabled(flag);
+ 	}
+    
+ 	void setChat(boolean flag) {
  		TextField_mychat.setEnabled(flag);
  	}
  	

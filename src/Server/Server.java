@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -50,40 +51,55 @@ class ServerThread extends Thread {
         
         Vector draw_panel = null;
 		InputStream is = null;
-		boolean flag = true;
+		boolean flag = false;
 		
-		//1.
-		//4명 접속하면 메세지 송신
-		while(Server.total_socket.size()<5) {
-			if(Server.total_socket.size() == 4) {
-				for (int k = 0; k < Server.total_socket.size(); k++) {
-					Socket temp = (Socket) Server.total_socket.get(k);
-					try {
-						temp.getOutputStream().write(tready);
-					} catch (Exception e) {
-						System.out.println("ready trans fail");
-					}
-				}
-				break;
-			}
-		}
-		
+		/* 1.
+		 * 4명 접속 기다림
+		 * */
+		while(Server.total_socket.size() != 4);
+
 		for (i = 0; i < 4; i++) {
+			flag = true;
 			// string -> byte 변환
-			//byte[] transstr = subject[i].getBytes();
-			// 주제 전달
-			Socket givesub = (Socket) Server.total_socket.get(i);
-			//try {
-			//	givesub.getOutputStream().write(transstr);
-			//} catch (IOException e) {
-			//	// TODO Auto-generated catch block
-			//	e.printStackTrace();
-			//}
-			// 그림받기
+			byte[] transstr = subject[i].getBytes();
 			
-			//그림 송신
+			Socket givesub = (Socket) Server.total_socket.get(i);
+			String draw_user = Server.info.get(givesub).name;
+			byte[] tdraw_user = draw_user.getBytes();
+			
+			/* 2.
+			 * 현재 그리는 유저 이름 송신
+			 * */
+			Server.sl.toLog("[" + draw_user + "]" + " 님이 그림을 그립니다.");
+			for (int k = 0; k < Server.total_socket.size(); k++) {
+				Socket temp = (Socket) Server.total_socket.get(k);
+				try {
+					OutputStream os = temp.getOutputStream();
+					os.write(tdraw_user);
+					os.flush();
+				} catch (Exception e) {
+					System.out.println("ready trans fail");
+				}
+			}
+			
+			/* 3.
+			 * 주제 송신
+			 * */
+			Server.sl.toLog("[" + draw_user + "]" + " 님의 주제: " + subject[i]);
 			try {
-				ObjectInputStream ois = new ObjectInputStream(givesub.getInputStream());
+				OutputStream os = givesub.getOutputStream();
+				os.write(transstr);
+				os.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			/* 
+			 * 그림 수신
+			 * */
+			try {
+				ObjectInputStream ois = new ObjectInputStream(server.getInputStream());
 				draw_panel = (Vector) ois.readObject();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -92,28 +108,29 @@ class ServerThread extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			
+			/* 4.
+			 * 그림 송신
+			 * */
 			synchronized (Server.total_socket) {
 				// 수신한 사진 전체 클라이언트에 보내기
 				for (int k = 0; k < Server.total_socket.size(); k++) {
+					if (k==i) {
+						continue;
+					}
 					Socket temp = (Socket) Server.total_socket.get(k);
 
 					try {
 						ObjectOutputStream oos = new ObjectOutputStream(temp.getOutputStream());
 						oos.writeObject(draw_panel);
-					} catch (Exception e) {
+						oos.flush();
+					} catch (Exception e1) {
 						System.out.println("사진 송신 오류");
 						Server.total_socket.remove(k);
 					}
 				}
 			}
-			// 답 받아오기
-			try {
-				is = server.getInputStream();
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-
+			
 			while (flag) {
 				b = new byte[256];
 				try {
@@ -123,9 +140,9 @@ class ServerThread extends Thread {
 						synchronized (Server.total_socket) {
 							for (int k = 0; k < Server.total_socket.size(); k++) {
 								Socket temp = (Socket) Server.total_socket.get(k);
-
 								try {
 									temp.getOutputStream().write(tpass);
+									temp.getOutputStream().flush();
 									i++;
 									continue;
 								} catch (Exception e) {
@@ -134,6 +151,7 @@ class ServerThread extends Thread {
 								}
 							}
 						}
+						flag = false;
 					} else { // 정답아님
 						synchronized (Server.total_socket) {
 							for (int k = 0; k < Server.total_socket.size(); k++) {
@@ -141,6 +159,7 @@ class ServerThread extends Thread {
 
 								try {
 									temp.getOutputStream().write(tfail);
+									temp.getOutputStream().flush();
 								} catch (Exception e) {
 									System.out.println("송신 오류");
 									Server.total_socket.remove(k);
@@ -159,11 +178,9 @@ class ServerThread extends Thread {
 					e.printStackTrace();
 					flag = false;
 				}
-			}
-		}
-		
-	}
-	
+			}	//while
+		}	//for		
+	}	//run
 }
 
 public class Server {

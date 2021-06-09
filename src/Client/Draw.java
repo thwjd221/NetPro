@@ -37,8 +37,12 @@ public class Draw extends JPanel{
         }
     }
     
-    void recvDraw(Vector<Point> temp) {
+    void recvDraw(Vector temp) {
     	xy = temp;
     	repaint();
+    }
+    
+    void clear() {
+    	xy = new Vector<Point>();
     }
 }

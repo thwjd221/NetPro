@@ -1,20 +1,15 @@
 package Client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import javax.swing.*;
 
 
-public class Room extends javax.swing.JFrame {
+public class Room extends JFrame {
     Socket client;
     String myname;
-    //ObjectOutputStream oos;
     
 	public Room(Socket client, String name) {
     	this.client = client;
@@ -26,22 +21,22 @@ public class Room extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
      void initComponents() {
 
-        Panel_screen = new javax.swing.JPanel();
+        Panel_screen = new JPanel();
         Draw_panel = new Draw();
-        Scroll_chat = new javax.swing.JScrollPane();
-        TextArea_chat = new javax.swing.JTextArea();
-        Layered_mychat = new javax.swing.JLayeredPane();
-        TextField_mychat = new javax.swing.JTextField();
-        TextField_name = new javax.swing.JTextField();;
-        ScrollBar_mychat = new javax.swing.JScrollBar();
-        Button_start = new javax.swing.JButton();
-        Button_exit = new javax.swing.JButton();
-        TextField_subject = new javax.swing.JTextField();
-        Label_subject = new javax.swing.JLabel();
-        Label_icon = new javax.swing.JLabel();
-        Label_screen = new javax.swing.JLabel();
+        Scroll_chat = new JScrollPane();
+        TextArea_chat = new JTextArea();
+        Layered_mychat = new JLayeredPane();
+        TextField_mychat = new JTextField();
+        TextField_name = new JTextField();;
+        ScrollBar_mychat = new JScrollBar();
+        Button_start = new JButton();
+        Button_exit = new JButton();
+        TextField_subject = new JTextField();
+        Label_subject = new JLabel();
+        Label_icon = new JLabel();
+        Label_screen = new JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Room");
         setAutoRequestFocus(false);
         setBackground(new java.awt.Color(51, 51, 51));
@@ -58,14 +53,14 @@ public class Room extends javax.swing.JFrame {
         Draw_panel.setPreferredSize(new java.awt.Dimension(590, 380));
         Draw_panel.setEnabled(false);
         
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(Draw_panel);
+        GroupLayout jPanel1Layout = new GroupLayout(Draw_panel);
         Draw_panel.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 590, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 370, Short.MAX_VALUE)
         );
 
@@ -74,14 +69,14 @@ public class Room extends javax.swing.JFrame {
 
         Scroll_chat.setBackground(new java.awt.Color(255, 255, 255));
         Scroll_chat.setBorder(null);
-        Scroll_chat.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        Scroll_chat.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         TextArea_chat.setEditable(false);
         TextArea_chat.setColumns(20);
         TextArea_chat.setFont(TextArea_chat.getFont());
         TextArea_chat.setLineWrap(true);
         TextArea_chat.setRows(5);
-        TextArea_chat.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1), "채팅창", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("굴림", 0, 10))); // NOI18N
+        TextArea_chat.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1), "채팅창", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("굴림", 0, 10))); // NOI18N
         Scroll_chat.setViewportView(TextArea_chat);
 
         Panel_screen.add(Scroll_chat);
@@ -94,29 +89,29 @@ public class Room extends javax.swing.JFrame {
             }
         });
 
-        ScrollBar_mychat.setOrientation(javax.swing.JScrollBar.HORIZONTAL);
+        ScrollBar_mychat.setOrientation(JScrollBar.HORIZONTAL);
         ScrollBar_mychat.setModel(TextField_mychat.getHorizontalVisibility());
 
-        Layered_mychat.setLayer(TextField_mychat, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        Layered_mychat.setLayer(ScrollBar_mychat, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        Layered_mychat.setLayer(TextField_mychat, JLayeredPane.DEFAULT_LAYER);
+        Layered_mychat.setLayer(ScrollBar_mychat, JLayeredPane.DEFAULT_LAYER);
 
-        javax.swing.GroupLayout Layered_mychatLayout = new javax.swing.GroupLayout(Layered_mychat);
+        GroupLayout Layered_mychatLayout = new GroupLayout(Layered_mychat);
         Layered_mychat.setLayout(Layered_mychatLayout);
         Layered_mychatLayout.setHorizontalGroup(
-            Layered_mychatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            Layered_mychatLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(Layered_mychatLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(Layered_mychatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TextField_mychat, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ScrollBar_mychat, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE))
+                .addGroup(Layered_mychatLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(TextField_mychat, GroupLayout.Alignment.TRAILING)
+                    .addComponent(ScrollBar_mychat, GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE))
                 .addContainerGap())
         );
         Layered_mychatLayout.setVerticalGroup(
-            Layered_mychatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Layered_mychatLayout.createSequentialGroup()
-                .addComponent(TextField_mychat, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ScrollBar_mychat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            Layered_mychatLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, Layered_mychatLayout.createSequentialGroup()
+                .addComponent(TextField_mychat, GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ScrollBar_mychat, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
 
         Panel_screen.add(Layered_mychat);
@@ -145,7 +140,7 @@ public class Room extends javax.swing.JFrame {
 
         TextField_subject.setEditable(false);
         TextField_subject.setBackground(new java.awt.Color(255, 255, 255));
-        TextField_subject.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        TextField_subject.setHorizontalAlignment(JTextField.CENTER);
         TextField_subject.setText("제시어");
         TextField_subject.setToolTipText("");
         TextField_subject.setBorder(null);
@@ -156,7 +151,7 @@ public class Room extends javax.swing.JFrame {
         TextField_name.setEditable(false);
         TextField_name.setBackground(new java.awt.Color(255, 255, 255));
         TextField_name.setFont(new java.awt.Font("굴림", 1, 11)); // NOI18N
-        TextField_name.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        TextField_name.setHorizontalAlignment(JTextField.CENTER);
         TextField_name.setText(myname);
         TextField_name.setToolTipText("");
         TextField_name.setBorder(null);
@@ -165,7 +160,7 @@ public class Room extends javax.swing.JFrame {
         
         Label_subject.setBackground(new java.awt.Color(255, 255, 255));
         Label_subject.setFont(new java.awt.Font("굴림", 1, 12)); // NOI18N
-        Label_subject.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Label_subject.setHorizontalAlignment(SwingConstants.CENTER);
         Label_subject.setText("");
         Panel_screen.add(Label_subject);
         Label_subject.setBounds(35, 80, 140, 210);
@@ -179,24 +174,23 @@ public class Room extends javax.swing.JFrame {
         Panel_screen.add(Label_screen);
         Label_screen.setBounds(0, 0, 830, 760);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Panel_screen, javax.swing.GroupLayout.PREFERRED_SIZE, 830, javax.swing.GroupLayout.PREFERRED_SIZE)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(Panel_screen, GroupLayout.PREFERRED_SIZE, 830, GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Panel_screen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(Panel_screen, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+    }
     
     //채팅 입력
-     void TextField_mychatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextField_mychatActionPerformed
-        // TODO add your handling code here:
+     void TextField_mychatActionPerformed(java.awt.event.ActionEvent evt) {
         String message = TextField_mychat.getText();
         TextField_mychat.setText("");
      	try {
@@ -204,37 +198,34 @@ public class Room extends javax.swing.JFrame {
      		ps.println(message);
      		ps.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-       //ps.println(message);
-       // ps.flush();
-    }//GEN-LAST:event_TextField_mychatActionPerformed
+    }
     
     //그림 전송
-     void Button_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_startActionPerformed
+     void Button_startActionPerformed(java.awt.event.ActionEvent evt) {
     	 try {
     		 ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
 			 oos.writeObject(Draw_panel.xy);
     		 oos.flush();
     		 oos.reset();
+    		 Append_Room_chat("그림 송신 완료");
     		 setDraw(false);
          } catch (IOException ex) {
              
          }
-    }//GEN-LAST:event_Button_startActionPerformed
+    }
 
     //접속 종료, 창 끄기
-     void Button_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_exitActionPerformed
+     void Button_exitActionPerformed(java.awt.event.ActionEvent evt) {
     	 try {
 			client.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	 System.exit(0);
         
-    }//GEN-LAST:event_Button_exitActionPerformed
+    }
      
     void Append_Room_chat(String s){
     	TextArea_chat.append(s + "\n");
@@ -255,19 +246,19 @@ public class Room extends javax.swing.JFrame {
  	
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-     javax.swing.JButton Button_exit;
-     javax.swing.JButton Button_start;
-     javax.swing.JLabel Label_icon;
-     javax.swing.JLabel Label_screen;
-     javax.swing.JLabel Label_subject;
-     javax.swing.JLayeredPane Layered_mychat;
-     javax.swing.JPanel Panel_screen;
-     javax.swing.JScrollBar ScrollBar_mychat;
-     javax.swing.JScrollPane Scroll_chat;
-     javax.swing.JTextArea TextArea_chat;
-     javax.swing.JTextField TextField_mychat;
-     javax.swing.JTextField TextField_name;
+     JButton Button_exit;
+     JButton Button_start;
+     JLabel Label_icon;
+     JLabel Label_screen;
+     JLabel Label_subject;
+     JLayeredPane Layered_mychat;
+     JPanel Panel_screen;
+     JScrollBar ScrollBar_mychat;
+     JScrollPane Scroll_chat;
+     JTextArea TextArea_chat;
+     JTextField TextField_mychat;
+     JTextField TextField_name;
      Draw Draw_panel;
-     javax.swing.JTextField TextField_subject;
+     JTextField TextField_subject;
     // End of variables declaration//GEN-END:variables
 }

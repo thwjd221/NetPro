@@ -1,10 +1,9 @@
 
 package Client;
 
-import java.awt.event.*;
 import javax.swing.*;
 
-public class Login extends javax.swing.JFrame {
+public class Login extends JFrame {
     String ID;
     Room room;
     
@@ -16,12 +15,12 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Panel_screen = new javax.swing.JPanel();
-        Panel_name = new javax.swing.JPanel();
-        Label_name = new javax.swing.JLabel();
-        TextField_name = new javax.swing.JTextField();
-        Button_login = new javax.swing.JButton();
-        Label_screen = new javax.swing.JLabel();
+        Panel_screen = new JPanel();
+        Panel_name = new JPanel();
+        Label_name = new JLabel();
+        TextField_name = new JTextField();
+        Button_login = new JButton();
+        Label_screen = new JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("로그인");
@@ -78,26 +77,26 @@ public class Login extends javax.swing.JFrame {
         Panel_screen.add(Label_screen);
         Label_screen.setBounds(0, 0, 600, 450);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+       GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Panel_screen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(Panel_screen,GroupLayout.DEFAULT_SIZE,GroupLayout.DEFAULT_SIZE,GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Panel_screen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(Panel_screen,GroupLayout.DEFAULT_SIZE,GroupLayout.DEFAULT_SIZE,GroupLayout.PREFERRED_SIZE)
         );
 
         getAccessibleContext().setAccessibleName("login");
 
         pack();
         setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+    private void loginActionPerformed(java.awt.event.ActionEvent evt) {
         ID = TextField_name.getText();
         if(ID.isEmpty()){
         	JOptionPane.showMessageDialog(null, new JLabel("닉네임을 입력해주세요.", JLabel.CENTER), "메세지", JOptionPane.WARNING_MESSAGE);
@@ -106,18 +105,18 @@ public class Login extends javax.swing.JFrame {
         	TextField_name.setText("");
         	dispose();
         }
-    }//GEN-LAST:event_loginActionPerformed
+    }
     
     String name(){
         return ID;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JButton Button_login;
-    javax.swing.JLabel Label_name;
-    javax.swing.JLabel Label_screen;
-    javax.swing.JPanel Panel_name;
-    javax.swing.JPanel Panel_screen;
-    javax.swing.JTextField TextField_name;
+    JButton Button_login;
+    JLabel Label_name;
+    JLabel Label_screen;
+    JPanel Panel_name;
+    JPanel Panel_screen;
+    JTextField TextField_name;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,9 +3,7 @@ package Client;
 import java.awt.Point;
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.Vector;
-
 
 import Server.User_info;
 
@@ -108,6 +106,7 @@ class ClientThread extends Thread{
 						System.out.println("사진 수신 오류");
 					}
 					room.Draw_panel.recvDraw(draw);
+					room.Append_Room_chat("그림 수신 완료");
 					room.setChat(true);
 				} catch(IOException e) {
 					e.printStackTrace();
@@ -121,6 +120,7 @@ class ClientThread extends Thread{
 			 * 정답 수신
 			 * */
 	        try {
+	        	
 	        	//in = client.getInputStream();
 				//byte[] b = new byte[256];
 				while((str = br.readLine()) != null) {

@@ -1,8 +1,12 @@
 package Client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 import javax.swing.*;
 
@@ -10,9 +14,7 @@ import javax.swing.*;
 public class Room extends javax.swing.JFrame {
     Socket client;
     String myname;
-    OutputStream out;
-    ObjectOutputStream oos;
-   
+    //ObjectOutputStream oos;
     
 	public Room(Socket client, String name) {
     	this.client = client;
@@ -23,13 +25,7 @@ public class Room extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
      void initComponents() {
-    	try {
-			OutputStream out = client.getOutputStream();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
+
         Panel_screen = new javax.swing.JPanel();
         Draw_panel = new Draw();
         Scroll_chat = new javax.swing.JScrollPane();
@@ -203,24 +199,29 @@ public class Room extends javax.swing.JFrame {
         // TODO add your handling code here:
         String message = TextField_mychat.getText();
         TextField_mychat.setText("");
-        try {
-            out.write(message.getBytes());
-            out.flush();
-        } catch (IOException ex) {
-            
-        }
+     	try {
+     		PrintStream ps = new PrintStream(client.getOutputStream());
+     		ps.println(message);
+     		ps.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       //ps.println(message);
+       // ps.flush();
     }//GEN-LAST:event_TextField_mychatActionPerformed
     
     //그림 전송
      void Button_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_startActionPerformed
     	 try {
-    		 oos = new ObjectOutputStream(client.getOutputStream());
+    		 ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
 			 oos.writeObject(Draw_panel.xy);
     		 oos.flush();
+    		 oos.reset();
+    		 setDraw(false);
          } catch (IOException ex) {
              
          }
-        //
     }//GEN-LAST:event_Button_startActionPerformed
 
     //접속 종료, 창 끄기
@@ -238,7 +239,6 @@ public class Room extends javax.swing.JFrame {
     void Append_Room_chat(String s){
     	TextArea_chat.append(s + "\n");
     }
-     
  	
  	void subject(String sub) {
  		Label_subject.setText(sub);

@@ -27,8 +27,6 @@ public class Login extends javax.swing.JFrame {
         setTitle("로그인");
         setAutoRequestFocus(false);
         setIconImage(Base.Img("https://blog.kakaocdn.net/dn/qkIfs/btq5OSqdpf2/POri2X86VkiHrHDS2kRFo0/img.png"));
-        //setBounds(new java.awt.Rectangle(0, 0, 0, 0));
-        //setMinimumSize(null);
         setResizable(false);
         setSize(new java.awt.Dimension(600, 450));
 
@@ -101,15 +99,13 @@ public class Login extends javax.swing.JFrame {
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
         ID = TextField_name.getText();
-        //if(false){  //Server의 user info랑 비교
-                //JOptionPane.showMessageDialog(null, new JLabel("등록된 닉네임이 있습니다.", JLabel.CENTER), "메세지", JOptionPane.WARNING_MESSAGE);
-                
-                TextField_name.setText("");
-                if(ID.isEmpty())
-                	System.exit(0);
-        //else{ //Room 접속
-                dispose();
-         //}
+        if(ID.isEmpty()){
+        	JOptionPane.showMessageDialog(null, new JLabel("닉네임을 입력해주세요.", JLabel.CENTER), "메세지", JOptionPane.WARNING_MESSAGE);
+        }
+        else{ //Room 접속
+        	TextField_name.setText("");
+        	dispose();
+        }
     }//GEN-LAST:event_loginActionPerformed
     
     String name(){

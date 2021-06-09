@@ -1,6 +1,6 @@
 package Server;
 
-import java.awt.Image;
+import java.util.Vector;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,10 +48,12 @@ class ServerThread extends Thread {
 	public void run() {
         login();
         
-        Client.Draw draw_panel = null;
+        Vector draw_panel = null;
 		InputStream is = null;
 		boolean flag = true;
 		
+		//1.
+		//4명 접속하면 메세지 송신
 		while(Server.total_socket.size()<5) {
 			if(Server.total_socket.size() == 4) {
 				for (int k = 0; k < Server.total_socket.size(); k++) {
@@ -79,10 +81,10 @@ class ServerThread extends Thread {
 			//}
 			// 그림받기
 			
-			
+			//그림 송신
 			try {
 				ObjectInputStream ois = new ObjectInputStream(givesub.getInputStream());
-				draw_panel = (Client.Draw) ois.readObject();
+				draw_panel = (Vector) ois.readObject();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -99,7 +101,6 @@ class ServerThread extends Thread {
 					try {
 						ObjectOutputStream oos = new ObjectOutputStream(temp.getOutputStream());
 						oos.writeObject(draw_panel);
-						// temp.getOutputStream().write(b);
 					} catch (Exception e) {
 						System.out.println("사진 송신 오류");
 						Server.total_socket.remove(k);

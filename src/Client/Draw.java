@@ -36,4 +36,9 @@ public class Draw extends JPanel{
                 (int) xy.get(i).getX(), (int) xy.get(i).getY());
         }
     }
+    
+    void recvDraw(Vector<Point> temp) {
+    	xy = temp;
+    	repaint();
+    }
 }

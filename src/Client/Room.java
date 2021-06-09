@@ -17,21 +17,14 @@ public class Room extends javax.swing.JFrame {
     String myname;
     OutputStream out;
     ObjectOutputStream oos;
-    
-    public void Append_Room_chat(String s){
-        TextArea_chat.append(s);
-    }
+   
     
 	public Room(Socket client, String name) {
     	this.client = client;
     	this.myname = name;
         initComponents();
     }
-	
-	public void subject(String sub) {
-		Label_subject.setText(sub);
-	}
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
      void initComponents() {
@@ -48,6 +41,7 @@ public class Room extends javax.swing.JFrame {
         TextArea_chat = new javax.swing.JTextArea();
         Layered_mychat = new javax.swing.JLayeredPane();
         TextField_mychat = new javax.swing.JTextField();
+        TextField_name = new javax.swing.JTextField();;
         ScrollBar_mychat = new javax.swing.JScrollBar();
         Button_start = new javax.swing.JButton();
         Button_exit = new javax.swing.JButton();
@@ -165,14 +159,24 @@ public class Room extends javax.swing.JFrame {
         TextField_subject.setBorder(null);
         TextField_subject.setEnabled(false);
         Panel_screen.add(TextField_subject);
-        TextField_subject.setBounds(35, 40, 140, 20);
+        TextField_subject.setBounds(35, 60, 140, 20);
+        
+        TextField_name.setEditable(false);
+        TextField_name.setBackground(new java.awt.Color(255, 255, 255));
+        TextField_name.setFont(new java.awt.Font("굴림", 1, 11)); // NOI18N
+        TextField_name.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        TextField_name.setText(myname);
+        TextField_name.setToolTipText("");
+        TextField_name.setBorder(null);
+        Panel_screen.add(TextField_name);
+        TextField_name.setBounds(35, 40, 140, 20);
         
         Label_subject.setBackground(new java.awt.Color(255, 255, 255));
         Label_subject.setFont(new java.awt.Font("굴림", 1, 12)); // NOI18N
         Label_subject.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Label_subject.setText("");
         Panel_screen.add(Label_subject);
-        Label_subject.setBounds(35, 60, 140, 230);
+        Label_subject.setBounds(35, 80, 140, 210);
 
         Label_icon.setIcon(new ImageIcon(Base.Img("https://blog.kakaocdn.net/dn/u0VTA/btq6L5OL4KO/IU2eWUt0zn77XZxFCqNYG1/img.png")));
         Panel_screen.add(Label_icon);
@@ -215,7 +219,7 @@ public class Room extends javax.swing.JFrame {
      void Button_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button_startActionPerformed
     	 try {
     		 oos = new ObjectOutputStream(client.getOutputStream());
-			 oos.writeObject(Draw_panel);
+			 oos.writeObject(Draw_panel.xy);
     		 oos.flush();
          } catch (IOException ex) {
              
@@ -234,7 +238,20 @@ public class Room extends javax.swing.JFrame {
     	 System.exit(0);
         
     }//GEN-LAST:event_Button_exitActionPerformed
-
+     
+    void Append_Room_chat(String s){
+    	TextArea_chat.append(s + "\n");
+    }
+     
+ 	
+ 	void subject(String sub) {
+ 		Label_subject.setText(sub);
+ 	}
+    
+ 	void setDraw(boolean flag) {
+ 		TextField_mychat.setEnabled(flag);
+ 	}
+ 	
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
      javax.swing.JButton Button_exit;
@@ -248,6 +265,7 @@ public class Room extends javax.swing.JFrame {
      javax.swing.JScrollPane Scroll_chat;
      javax.swing.JTextArea TextArea_chat;
      javax.swing.JTextField TextField_mychat;
+     javax.swing.JTextField TextField_name;
      Draw Draw_panel;
      javax.swing.JTextField TextField_subject;
     // End of variables declaration//GEN-END:variables

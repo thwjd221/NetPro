@@ -3,6 +3,8 @@ package Client;
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Vector;
+
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -45,13 +47,13 @@ class ClientThread extends Thread{
 	public void run() {
         login();
         
-        Image img = null;
 		InputStream in = null;
 		OutputStream out = null;
 		
-        //4명 접속할 때까지 기다림
-		room.TextField_mychat.setEnabled(false);	//채팅 금지
+		room.setDraw(false); //채팅 금지
 		
+		//1.
+		//4명 접속할 때까지 기다림4명 접속할 때까지 기다린 후, 메세지 수신
         try {
 			in = client.getInputStream();
 			byte[] b = new byte[256];
@@ -65,7 +67,7 @@ class ClientThread extends Thread{
         
 		//for( i = 0; i < 4; i++) {
 			//그림 그리는 사람만 주제 받게 flag 설정
-			room.TextField_mychat.setEnabled(true);
+			
 			
 			//try {
 				//in = client.getInputStream();
@@ -80,10 +82,12 @@ class ClientThread extends Thread{
 			//	e1.printStackTrace();
 			//}
 			
+			//4.
 			//그림 수신
 			try {
 				ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
-				room.Draw_panel = (Draw) ois.readObject();
+				Vector temp = (Vector) ois.readObject();
+				room.Draw_panel.recvDraw(temp);
 			}
 			catch(IOException e) {
 				e.printStackTrace();

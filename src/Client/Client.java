@@ -11,7 +11,6 @@ class ClientThread extends Thread{
 	Socket client;
     String myname;
 	Room room;
-	//BufferedReader br;
 	
 	public ClientThread(Socket client) {
 		this.client = client;
@@ -56,10 +55,6 @@ class ClientThread extends Thread{
 	        	br = new BufferedReader(new InputStreamReader(client.getInputStream()));
 	        	room.Draw_panel.clear();
 	        	str = br.readLine();
-				//in = client.getInputStream();
-				//byte[] b = new byte[256];
-				//in.read(b);
-				//str = new String(b);
 	        	
 				if(myname.equals(str)) {
 					flag = true;
@@ -68,13 +63,10 @@ class ClientThread extends Thread{
 					flag = false;
 				}
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-	        
 	        room.Append_Room_chat("[" + str + "]" + " 님이 그림을 그립니다.");
-	        
-	        
+	        	  
 			/* 3.
 			 * 주제 수신
 			 * */
@@ -83,12 +75,8 @@ class ClientThread extends Thread{
 	            try {
 	            	br = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		        	str = br.readLine();
-	    			//byte[] b = new byte[256];
-	    			//in.read(b);
-	    			//str = new String(b);
 	    			room.subject(str);
 	    		} catch (IOException e) {
-	    			// TODO Auto-generated catch block
 	    			e.printStackTrace();
 	    		}
 	        }
@@ -99,17 +87,12 @@ class ClientThread extends Thread{
 				try {
 					ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
 					Vector<Point> draw = (Vector<Point>) ois.readObject();
-					if(draw == null) {
-						//room.Draw_panel.clear();
-						System.out.println("사진 수신 오류");
-					}
 					room.Draw_panel.recvDraw(draw);
 					room.Append_Room_chat("그림 수신 완료");
 					room.setChat(true);
 				} catch(IOException e) {
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -118,8 +101,6 @@ class ClientThread extends Thread{
 			 * 정답 수신
 			 * */
 	        try {
-	        	//in = client.getInputStream();
-				//byte[] b = new byte[256];
 	        	br = new BufferedReader(new InputStreamReader(client.getInputStream()));
 	        	while((str = br.readLine()) != null) {
 	        		room.Append_Room_chat(str);
@@ -133,6 +114,8 @@ class ClientThread extends Thread{
 				e.printStackTrace();
 			}
 	        
+			room.setDraw(false); //채팅 금지
+			room.setChat(false);
 		}
 	}
 }

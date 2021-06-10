@@ -4,11 +4,10 @@ import java.util.Vector;
 import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -49,81 +48,83 @@ class ServerThread extends Thread {
     	}
     }
     
-    synchronized boolean recv(boolean flag) {
-    	String str;
+    void remove(Socket temp) {
+    	String name;
+		name = Server.info.get(temp).name;
+		
+    	Server.total_socket.remove(temp);
+
+		Server.info.remove(temp);	//user_info 지우기
+		Server.sl.setUserlist();
+		Server.sl.toLog("[" + name + "]" + " 님이 퇴장하셨습니다.");
+    }
+    
+    void sendAll(String msg, String err) {
+    	//synchronized (Server.total_socket) {
+			for (int k = 0; k < Server.total_socket.size(); k++) {
+				Socket temp = (Socket) Server.total_socket.get(k);
+				
+				try {
+					//ObjectOutputStream oos = new ObjectOutputStream(temp.getOutputStream());
+	            	//oos.writeObject(pass);
+	            	//oos.flush();
+					PrintWriter pw = new PrintWriter(temp.getOutputStream());
+	            	//PrintStream ps = new PrintStream(temp.getOutputStream());
+					pw.println(msg);
+	                pw.flush();
+				} catch (Exception e) {
+					System.out.println(err);
+					remove(temp);
+				}
+			}
+    	//}
+    }
+    
+    boolean recv(boolean flag) {
+    	BufferedReader br = null;
+
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(server.getOutputStream());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+		try {
+			br = new BufferedReader(new InputStreamReader(server.getInputStream()));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		String str;
 		while (flag) {
 			//b = new byte[256];
 			try {
-				BufferedReader br = new BufferedReader(new InputStreamReader(server.getInputStream()));
-				str = br.readLine();
-				String msg = "[" + Server.info.get(server).name + "]: " + str;
-				Server.sl.toLog(msg);
-				
-				for (int k = 0; k < Server.total_socket.size(); k++) {
-					Socket temp = (Socket) Server.total_socket.get(k);
-					try {
-						PrintStream ps = new PrintStream(temp.getOutputStream());
-						ps.println(msg);
-						ps.flush();
-					} catch (Exception e) {
-						System.out.println("송신 오류");
-						Server.total_socket.remove(k);
-					}
-				}
-				
-				//is.read(b);
-				// 정답 비교
-				if (str.equals(answer)) { // 정답임
-					//synchronized (Server.total_socket) {
-						for (int k = 0; k < Server.total_socket.size(); k++) {
-							Socket temp = (Socket) Server.total_socket.get(k);
-							
-							try {
-								//ObjectOutputStream oos = new ObjectOutputStream(temp.getOutputStream());
-			                	//oos.writeObject(pass);
-			                	//oos.flush();
-								PrintStream ps = new PrintStream(temp.getOutputStream());
-								ps.println(pass);
-								ps.flush();
-							} catch (Exception e) {
-								System.out.println("송신 오류");
-								Server.total_socket.remove(k);
-							}
-						}
-					//}
-					flag = false;	//현재 turn 종료
-				} else { // 정답아님
-					//synchronized (Server.total_socket) {
-						for (int k = 0; k < Server.total_socket.size(); k++) {
-							Socket temp = (Socket) Server.total_socket.get(k);
+				Server.sl.toLog("뭐야");
+				while((str = br.readLine()) != null) {
+					String msg = "[" + Server.info.get(server).name + "]: " + str;
+					Server.sl.toLog(msg);
 
-							try {
-								//ObjectOutputStream oos = new ObjectOutputStream(temp.getOutputStream());
-			                	//oos.writeObject(fail);
-			                	//oos.flush();
-								PrintStream ps = new PrintStream(temp.getOutputStream());
-								ps.println(pass);
-								ps.flush();
-							} catch (Exception e) {
-								System.out.println("송신 오류");
-								Server.total_socket.remove(k);
-								
-								//name 얻어오기
-								String name;
-								name = Server.info.get(temp).name;
-								Server.info.remove(temp);	//user_info 지우기
-								Server.sl.setUserlist();
-								Server.sl.toLog("[" + name + "]" + " 님이 퇴장하셨습니다.");
-							}
-						}
-					//}
-				}
+					sendAll(msg, "송신 오류");
+					//is.read(b);
+					
+					// 정답 비교
+					if (str.equals(answer)) { // 정답임
+						sendAll(pass, "송신 오류");
+						flag = false;	//현재 turn 종료
+						break;
+					} else { // 정답아님
+						sendAll(fail, "송신 오류");
+					}
+	        	}
 			} catch (Exception e) {
 				System.out.println("정답 수신 오류");
 				e.printStackTrace();
 				flag = false;
 			}
-		}	//while
+		}
 		return flag;
     }
     
@@ -132,7 +133,7 @@ class ServerThread extends Thread {
        
         //OutputStream out = server.getOutputStream(); 
         //Vector<Point> draw_panel;
-		InputStream is = null;
+		//InputStream is = null;
 		
 		boolean flag = false;
 		
@@ -160,9 +161,10 @@ class ServerThread extends Thread {
 			for (int k = 0; k < Server.total_socket.size(); k++) {
 				Socket temp = (Socket) Server.total_socket.get(k);
 				try {
-					PrintStream ps = new PrintStream(temp.getOutputStream());
-	                ps.println(draw_user);
-	                ps.flush();
+					PrintWriter pw = new PrintWriter(temp.getOutputStream());
+					//PrintStream ps = new PrintStream(temp.getOutputStream());
+	                pw.println(draw_user);
+	                pw.flush();
 					//OutputStream os = temp.getOutputStream();
 					//os.write(tdraw_user);
 					//os.flush();
@@ -177,29 +179,32 @@ class ServerThread extends Thread {
 			 * */
 			Server.sl.toLog("[" + draw_user + "]" + " 님의 주제: " + subject[i]);
 			try {
-            	PrintStream ps = new PrintStream(givesub.getOutputStream());
-				ps.println(subject[i]);
-                ps.flush();
-				//OutputStream os = givesub.getOutputStream();
-				//os.write(transstr);
-				//os.flush();
-			} catch (IOException e1) {
+				PrintWriter pw = new PrintWriter(givesub.getOutputStream());
+				pw.println(subject[i]);
+				pw.flush();
+			} catch (IOException e2) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				e2.printStackTrace();
 			}
+			//PrintStream ps = new PrintStream(givesub.getOutputStream());
+
+			//OutputStream os = givesub.getOutputStream();
+			//os.write(transstr);
+			//os.flush();
 			
 			
-			/* 
-			 * 그림 수신
-			 * */
+			
 			try {
+				/* 
+				 * 그림 수신
+				 * */
 				ObjectInputStream ois = new ObjectInputStream(givesub.getInputStream());
 				Vector<Point> draw_panel = (Vector<Point>) ois.readObject();
 
 				/* 4.
 				 * 그림 송신
 				 * */
-				synchronized (Server.total_socket) {
+				//synchronized (Server.total_socket) {
 					// 수신한 사진 전체 클라이언트에 보내기
 					for (int k = 0; k < Server.total_socket.size(); k++) {
 						if(k == i)
@@ -216,9 +221,8 @@ class ServerThread extends Thread {
 							Server.total_socket.remove(k);
 						}
 					}
-				}
-				
-				
+				//}
+	
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -227,10 +231,13 @@ class ServerThread extends Thread {
 				e.printStackTrace();
 			}
 			
-			Server.sl.toLog("[" + draw_user + "]" + "님의 그림 수신 완료");
+			/* 5. 
+			 * 
+			 */
+			Server.sl.toLog("[" + draw_user + "]" + " 님의 그림 수신 완료");
 			flag = recv(flag);
 
-		}	//for		
+		}			
 	}	//run
 }
 
@@ -256,7 +263,7 @@ public class Server {
 			
 			//ServerThread thread = new ServerThread(server);
 			thread.start();
-			
+
             if(thread.isInterrupted() == true) {
             	total_socket.remove(server);
             	//name 얻어오기

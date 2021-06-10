@@ -47,7 +47,6 @@ class ClientThread extends Thread{
 		
 		room.setDraw(false); //채팅 금지
 		room.setChat(false);
-		
 		for(int i = 0; i < 4; i++) {
 			
 			/* 2.
@@ -84,7 +83,6 @@ class ClientThread extends Thread{
 	            try {
 	            	br = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		        	str = br.readLine();
-	            	//java.lang.NullPointerException 오류 생김...
 	    			//byte[] b = new byte[256];
 	    			//in.read(b);
 	    			//str = new String(b);
@@ -120,16 +118,17 @@ class ClientThread extends Thread{
 			 * 정답 수신
 			 * */
 	        try {
-	        	
 	        	//in = client.getInputStream();
 				//byte[] b = new byte[256];
-				while((str = br.readLine()) != null) {
-					room.Append_Room_chat(str);
+	        	br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+	        	while((str = br.readLine()) != null) {
+	        		room.Append_Room_chat(str);
 					if(str.equals("correct!")) {
+						room.subject("");
 						break;
 					}
-					//if(in.read() > 0 && str != "correct!" && str != "no!") 
-				}
+	        	}
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

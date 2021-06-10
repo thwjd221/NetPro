@@ -2,7 +2,8 @@ package Client;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import javax.swing.*;
 
@@ -20,7 +21,6 @@ public class Room extends JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
      void initComponents() {
-
         Panel_screen = new JPanel();
         Draw_panel = new Draw();
         Scroll_chat = new JScrollPane();
@@ -192,14 +192,16 @@ public class Room extends JFrame {
     //채팅 입력
      void TextField_mychatActionPerformed(java.awt.event.ActionEvent evt) {
         String message = TextField_mychat.getText();
-        TextField_mychat.setText("");
-     	try {
-     		PrintStream ps = new PrintStream(client.getOutputStream());
-     		ps.println(message);
-     		ps.flush();
+        PrintWriter pw;
+		try {
+			pw = new PrintWriter(client.getOutputStream());
+			pw.println(message);
+			pw.flush();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		TextField_mychat.setText("");
     }
     
     //그림 전송
@@ -224,27 +226,29 @@ public class Room extends JFrame {
 			e.printStackTrace();
 		}
     	 System.exit(0);
-        
     }
-     
+    
+     //채팅창에 message 붙이기
     void Append_Room_chat(String s){
     	TextArea_chat.append(s + "\n");
     }
  	
+    //현재 게임 주제 설정
  	void subject(String sub) {
  		Label_subject.setText(sub);
  	}
  	
+ 	//그림 보낼 수 있게 or 없게 버튼 설정
  	void setDraw(boolean flag) {
  		Button_start.setEnabled(flag);
  		Draw_panel.setEnabled(flag);
  	}
     
+ 	//채팅할 수 있게 or 없게  설정
  	void setChat(boolean flag) {
  		TextField_mychat.setEnabled(flag);
  	}
  	
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
      JButton Button_exit;
      JButton Button_start;

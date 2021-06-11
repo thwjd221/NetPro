@@ -8,13 +8,13 @@ import javax.imageio.ImageIO;
 
 public class Base {
     public static Image Img(String path){
-        Image image = null;
+    	Image image = null;
          try {
-                URL url = new URL(path);
-                image = ImageIO.read(url);
-	} catch (IOException e) {
-            
-	}
+         	URL url = new URL(path);
+            image = ImageIO.read(url);
+         } catch (IOException e) {
+        	 e.printStackTrace();
+         }
         return image;
     }
 }

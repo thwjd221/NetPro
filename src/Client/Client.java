@@ -12,8 +12,17 @@ class ClientThread extends Thread{
     String myname;
 	Room room;
 	
+	ObjectOutputStream oos;
+	ObjectInputStream ois;
+	
 	public ClientThread(Socket client) {
 		this.client = client;
+		try {
+			oos = new ObjectOutputStream(client.getOutputStream());
+			ois = new ObjectInputStream(client.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
     void login(){
@@ -24,14 +33,15 @@ class ClientThread extends Thread{
             if(!lg.isDisplayable()){    //아이디 입력 성공, 로그인 창 꺼짐
                 myname = lg.name();
                 try {
-                    PrintStream ps = new PrintStream(client.getOutputStream());
-                    ps.println(myname); //서버한테 name 보내줌
-                    ps.flush();
-                    room = new Room(client, myname);
-                    room.setVisible(true);
-                } catch (IOException ex) {
-        
-                }
+					oos.writeObject(myname);
+					oos.flush();
+					oos.reset();
+					room = new Room(client, myname, oos);
+					room.setVisible(true);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 break;
             }
         }
@@ -46,24 +56,27 @@ class ClientThread extends Thread{
 		
 		room.setDraw(false); //채팅 금지
 		room.setChat(false);
+
 		for(int i = 0; i < 4; i++) {
-			
 			/* 2.
 			 * 현재 그리는 유저 이름 수신
-			 * */		
-	        try {
-	        	br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-	        	room.Draw_panel.clear();
-	        	str = br.readLine();
-	        	
+			 * */			
+			try {
+				room.Draw_panel.clear();
+				str = (String)ois.readObject();
+				
 				if(myname.equals(str)) {
 					flag = true;
 				}
 				else {
 					flag = false;
 				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			} catch (ClassNotFoundException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
 	        room.Append_Room_chat("[" + str + "]" + " 님이 그림을 그립니다.");
 	        	  
@@ -73,19 +86,16 @@ class ClientThread extends Thread{
 			if(flag) {
 	        	room.setDraw(true);
 	            try {
-	            	br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		        	str = br.readLine();
+	            	str = (String)ois.readObject();
 	    			room.subject(str);
-	    		} catch (IOException e) {
+	    		} catch (IOException | ClassNotFoundException e) {
 	    			e.printStackTrace();
 	    		}
 	        }
 			/* 4.
 			 * 그림 수신
 			 * */
-			else{
 				try {
-					ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
 					Vector<Point> draw = (Vector<Point>) ois.readObject();
 					room.Draw_panel.recvDraw(draw);
 					room.Append_Room_chat("그림 수신 완료");
@@ -95,14 +105,16 @@ class ClientThread extends Thread{
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}
-			}
 			
+				
 			/* 5.
 			 * 정답 수신
-			 * */
+			 * */	
+			Thread room_thread = new Thread(room);	
+			room_thread.start();
 	        try {
-	        	br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-	        	while((str = br.readLine()) != null) {
+	        	while(true) {
+	        		str = (String)ois.readObject();
 	        		room.Append_Room_chat(str);
 					if(str.equals("correct!")) {
 						room.subject("");
@@ -110,7 +122,7 @@ class ClientThread extends Thread{
 					}
 	        	}
 
-			} catch (IOException e) {
+			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 	        
@@ -121,13 +133,13 @@ class ClientThread extends Thread{
 }
 
 public class Client {
-	User_info myinfo;
+	static int mem = 0;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {			
 			Socket socket;
 			socket = new Socket("localhost",8888);	//소켓 서버 접속
-                        
+    
 			ClientThread t1 = new ClientThread(socket);
 			t1.start();
 		}
